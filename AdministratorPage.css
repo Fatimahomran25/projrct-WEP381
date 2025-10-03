@@ -8,6 +8,7 @@ body {
   width: 30px;
   height: 30px;
  }
+
 /* الكومنت لنا  */
   .navbar {
   background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
@@ -21,6 +22,10 @@ body {
 .nav-link:hover {
   color: #5f5c5c; /* لون عند المرور */
 }
+ .navbar-brand img{
+  width: 70px;
+  height:70px;
+ }
 
 .container .menu{
   width: 19%;
