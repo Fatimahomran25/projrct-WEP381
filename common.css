@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  background: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0,0,0,0.3) 100%),
+    url("assets/KSU1.jpg") center/cover no-repeat fixed;/*  هنا عشان اموج الصوره واخلي فيها*/
+}
+ .nav-item .nav-link img{
+  width: 30px;
+  height: 30px;
+ }
+ .main{
+    display: flex;
+    flex-direction: column;
+    
+
+ }
+/* الكومنت لنا  */
+  .navbar {
+  background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
+}
+
+.navbar-brand,.nav-link {
+  color: white ;
+}
+
+ /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
+.nav-link:hover {
+  color: #5f5c5c; /* لون عند المرور */
+}
+
+.container {
+  width: 19%;
+  height: 25%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10%;
+  margin-right: 10%;
+  
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+  
+}
+.container .welcom{
+  width: 50%;
+  height: 40%;
+   /* display هي طريقه عرض مقاربه  من البوزشن  */
+  display: flex;
+  flex-direction: column;
+  margin-top: 15%;
+  text-align: center;
+
+
+  color: aliceblue;
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيفb order  شبه شفاف */
+}
+
+.container .welcom h1{
+  
+  margin-top: 30px;
+}
+
+.glass-nav {
+  background:  rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+}
+.footer-logo img{
+  width: 8%;
+
+}

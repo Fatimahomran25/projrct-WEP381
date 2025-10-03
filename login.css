@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  
+  background: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0,0,0,0.3) 100%),
+    url("assets/KSU1.jpg") center/cover no-repeat fixed;/*  هنا عشان اموج الصوره واخلي فيها*/
+}
+/* الكومنت لنا  */
+  .navbar {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.3) !important; /* هنا خليتnav  شفاف */
+  
+}
+
+
+.navbar-brand,.nav-link {
+  color: white !important;
+  
+}
+ /*      */
+ .nav-item .nav-link img{
+  width: 30px;
+  height: 30px;
+ }
+ /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
+.nav-link:hover {
+  color: #5f5c5c !important; /* لون عند المرور */
+}
+.container .card{
+  width: 30%;
+  height: 60%;
+  display: flex;
+  justify-content: space-evenly;
+  
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+}
+
+
+.glass-nav {
+  background:  rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.footer-logo img{
+  width: 8%;
+
+}
