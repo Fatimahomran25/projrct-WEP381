@@ -12,11 +12,37 @@ body {
   
 }
 
+.container .card .part1 img{
+width: 20%;
+height: 23%;
+color: aliceblue;
+text-align: center;
+margin-bottom: 20px; 
 
+
+
+}
+.container .card .part1{
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+align-items: center;
+color: aliceblue;
+text-align: center;
+margin-bottom: 4px;
+margin-bottom: 20px; 
+ 
+
+}
 .navbar-brand,.nav-link {
   color: white !important;
   
+  
 }
+ .navbar-brand img{
+  width: 70px;
+  height:70px;
+ }
  /*      */
  .nav-item .nav-link img{
   width: 30px;
@@ -26,10 +52,12 @@ body {
 .nav-link:hover {
   color: #5f5c5c !important; /* لون عند المرور */
 }
+
 .container .card{
   width: 30%;
   height: 60%;
-  display: flex;
+  
+  margin-top: 200px;
   justify-content: space-evenly;
   
   /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
@@ -38,6 +66,7 @@ body {
   border-radius: 15px;                   /* زوايا  */
   border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
 }
+
 
 
 .glass-nav {
@@ -50,3 +79,5 @@ body {
   width: 8%;
 
 }
+
+
