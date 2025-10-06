@@ -28,8 +28,7 @@ body {
  }
 
 .container .menu{
-  width: 19%;
-  height: 25%;
+ 
   display: flex;
   justify-content: space-evenly;
   margin-top: 10%;
@@ -90,6 +89,14 @@ body {
   backdrop-filter: blur(6px);
 }
 .footer-logo img{
-  width: 8%;
+  width: 70px;
 
+}
+.footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around !important;
+  align-items: center;
+  
+ 
 }

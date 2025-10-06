@@ -72,12 +72,17 @@ margin-bottom: 20px;
 .glass-nav {
   background:  rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .footer-logo img{
-  width: 8%;
+  width: 70px;
 
 }
-
-
+.footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around !important;
+  align-items: center;
+  
+ 
+}
