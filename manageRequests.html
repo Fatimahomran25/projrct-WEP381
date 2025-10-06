@@ -11,56 +11,48 @@
 <body>
 
   <!-- Navbar -->
- 
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand"><img src="assets/icon.png" alt="icon"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" >
-        
-      </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          
-           <li class="nav-item"><a class="nav-link fw-bold" href="login.html"><img src="assets/logout.png"  alt="logout">Log out</a></li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="login.html">
+              <img src="assets/logout.png" alt="logout"> Log out
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-
   <!-- Content -->
   <div class="container d-flex align-items-start" style="height: 100vh;">
-<div class="container d-flex  align-items-start " style="height: 100vh;">
-  <div class="menu p-4 shadow-lg d-flex  align-items-start" >
-  <ul class="list-group  ">
-
-    <li class="list-group-item bg-transparent border-0">
-      <a href="load-schedule.html">
-        <img src="assets/load.png" alt="icon Load & Schedule" > Load & Schedule
-      </a>
-    </li>
-
-    <li class="list-group-item bg-transparent border-0">
-      <a href="courses.html">
-        <img src="assets/courses.png" alt="icon Courses" > Courses
-      </a>
-    </li>
-
-    <li class="list-group-item bg-transparent border-0">
-      <a href="requests.html">
-        <img src="assets/icons8-form-50.png" alt="icom Requests"> Requests
-      </a>
-    </li>
-
-    <li class="list-group-item bg-transparent border-0">
-      <a href="assignments.html">
-        <img src="assets/icons8-edit-property-50.png" alt="icon Assignments  Conflicts"> Assignments 
-      </a>
-    </li>
-
-  </ul>
-</div>
-
+    <!-- Sidebar -->
+    <div class="menu p-4 shadow-lg d-flex align-items-start">
+      <ul class="list-group">
+        <li class="list-group-item bg-transparent border-0">
+          <a href="load-schedule.html">
+            <img src="assets/load.png" alt="Load & Schedule"> Load & Schedule
+          </a>
+        </li>
+        <li class="list-group-item bg-transparent border-0">
+          <a href="courses.html">
+            <img src="assets/courses.png" alt="Courses"> Courses
+          </a>
+        </li>
+        <li class="list-group-item bg-transparent border-0">
+          <a href="manageRequests.html" class="active-link">
+            <img src="assets/icons8-form-50.png" alt="Requests"> Requests
+          </a>
+        </li>
+        <li class="list-group-item bg-transparent border-0">
+          <a href="assignments.html">
+            <img src="assets/icons8-edit-property-50.png" alt="Assignments"> Assignments
+          </a>
+        </li>
+      </ul>
+    </div>
 
     <!-- Requests Table -->
     <div class="requests shadow-lg">
@@ -79,56 +71,137 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Dr. Ahmed Ali</td>
-              <td>Professor</td>
-              <td>Full Load</td>
-              <td>SWE 381, SWE 321</td>
-              <td><span class="badge bg-warning text-dark">Pending</span></td>
-              <td>
-                <button class="btn btn-sm btn-primary">View</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Dr. Sara Saleh</td>
-              <td>Assistant Prof.</td>
-              <td>Partially Available</td>
-              <td>SWE 312, SWE 314</td>
-              <td><span class="badge bg-success">Approved</span></td>
-              <td>
-                <button class="btn btn-sm btn-primary">View</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Mr. Khalid Omar</td>
-              <td>Lecturer</td>
-              <td>Unavailable</td>
-              <td>-</td>
-              <td><span class="badge bg-secondary">Closed</span></td>
-              <td>
-                <button class="btn btn-sm btn-primary">View</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-          </tbody>
+<tbody>
+  <!-- Ahmed -->
+  <tr>
+    <td>Dr. Ahmed Ali</td>
+    <td>Professor</td>
+    <td>Full Load</td>
+    <td>SWE 381, SWE 321</td>
+    <td><span class="badge bg-warning text-dark">Pending</span></td>
+    <td>
+      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAhmed">View</button>
+      <button class="btn btn-sm btn-danger">Delete</button>
+    </td>
+  </tr>
+
+  <!-- Sara -->
+  <tr>
+    <td>Dr. Sara Saleh</td>
+    <td>Assistant Prof.</td>
+    <td>Partially Available</td>
+    <td>SWE 312, SWE 314</td>
+    <td><span class="badge bg-success">Approved</span></td>
+    <td>
+      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalSara">View</button>
+      <button class="btn btn-sm btn-danger">Delete</button>
+    </td>
+  </tr>
+
+  <!-- Khalid -->
+  <tr>
+    <td>Mr. Khalid Omar</td>
+    <td>Lecturer</td>
+    <td>Unavailable</td>
+    <td>-</td>
+    <td><span class="badge bg-secondary">Closed</span></td>
+    <td>
+      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalKhalid">View</button>
+      <button class="btn btn-sm btn-danger">Delete</button>
+    </td>
+  </tr>
+</tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-<footer class="footer glass-nav fixed-bottom ">
-  <div class="container d-flex flex-colum justify-content-center align-items-center ">
-    
-    <div class="footer-logo ">
-      <img src="assets/Vision.png" alt="Vision 2030" >
+  <!-- Modal: Ahmed -->
+<div class="modal fade" id="modalAhmed" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title">Request Details - Dr. Ahmed Ali</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Rank:</strong> Professor</p>
+        <p><strong>Availability:</strong> Full Load</p>
+        <p><strong>Preferred Courses:</strong> SWE 381, SWE 321</p>
+        <p><strong>Comments:</strong> Prefers morning classes, no weekends.</p>
+      </div>
     </div>
-
-    <p class=" text-white">&copy; 2025 King Saud University</p>
   </div>
-</footer>
+</div>
+
+<!-- Modal: Sara -->
+<div class="modal fade" id="modalSara" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title">Request Details - Dr. Sara Saleh</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Rank:</strong> Assistant Professor</p>
+        <p><strong>Availability:</strong> Partially Available</p>
+        <p><strong>Preferred Courses:</strong> SWE 312, SWE 314</p>
+        <p><strong>Comments:</strong> Available after 10 AM only.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Khalid -->
+<div class="modal fade" id="modalKhalid" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title">Request Details - Mr. Khalid Omar</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Rank:</strong> Lecturer</p>
+        <p><strong>Availability:</strong> Unavailable</p>
+        <p><strong>Preferred Courses:</strong> None</p>
+        <p><strong>Comments:</strong> On academic leave this semester.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="viewRequestModal" tabindex="-1" aria-labelledby="viewRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title" id="viewRequestModalLabel">Faculty Request Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Faculty Name:</strong> Dr. Ahmed Ali</p>
+          <p><strong>Rank:</strong> Professor</p>
+          <p><strong>Availability:</strong> Full Load</p>
+          <p><strong>Preferred Courses:</strong> SWE 381 - Web Applications Development, SWE 321 - Software Design and Architecture</p>
+          <p><strong>Comments:</strong> Prefers morning classes, no weekends.</p>
+        </div>
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer glass-nav fixed-bottom">
+    <div class="container d-flex flex-colum justify-content-center align-items-center">
+      <div class="footer-logo">
+        <img src="assets/Vision.png" alt="Vision 2030">
+      </div>
+      <p class="text-white">&copy; 2025 King Saud University</p>
+    </div>
+  </footer>
+
 </body>
 </html>
