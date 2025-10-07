@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0, 0, 0, 0.3) 100%),
+              url("assets/KSU1.jpg") center/cover no-repeat fixed;
+}
+
+/* Navbar */
+.navbar {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.navbar-brand img {
+  width: 70px;
+  height: 70px;
+}
+.nav-item .nav-link img {
+  width: 30px;
+  height: 30px;
+}
+.navbar-brand,.nav-link {
+  color: white;
+}
+
+.nav-link:hover {
+color: #5f5c5c;}
+
+.container .menu{
+ 
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10%;
+  margin-right: 10%;
+  
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+}
+
+.content-area {
+  width: 100%;
+  max-width: 1200px;
+  margin: 30px;
+}
+
+.view-list {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.view-list-heading {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.submit{
+  text-align: center;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content:space-around !important;
+  align-items: center;
+}
+.footer-logo img {
+  width: 70px;
+}
+
