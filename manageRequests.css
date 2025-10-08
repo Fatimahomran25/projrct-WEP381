@@ -106,3 +106,7 @@ body {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+.menu .list-group-item.selected {
+  background-color: rgba(60, 98, 204, 0.8) !important; 
+  border-radius: 10px;
+}
