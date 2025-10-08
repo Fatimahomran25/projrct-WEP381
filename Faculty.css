@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0, 0, 0, 0.3) 100%),
@@ -5,23 +6,28 @@ body {
 }
 
 /* Navbar */
-.navbar {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-.navbar-brand img {
-  width: 70px;
-  height: 70px;
-}
-.nav-item .nav-link img {
+ .nav-item .nav-link img{
   width: 30px;
   height: 30px;
-}
-.navbar-brand,.nav-link {
-  color: white;
+ }
+
+/* الكومنت لنا  */
+  .navbar {
+  background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
 }
 
+.navbar-brand,.nav-link {
+  color: white ;
+}
+
+ /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
 .nav-link:hover {
-color: #5f5c5c;}
+  color: #5f5c5c; /* لون عند المرور */
+}
+ .navbar-brand img{
+  width: 70px;
+  height:70px;
+ }
 
 .container .menu{
  
@@ -35,7 +41,21 @@ color: #5f5c5c;}
   backdrop-filter: blur(10px);           /* يموّه الخلفية */
   border-radius: 15px;                   /* زوايا  */
   border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+  
 }
+.container .menu ul a{
+    color: aliceblue;
+    text-decoration: none;
+    
+
+}
+.container .menu ul img{
+   
+    width: 20px;
+    height: 20px;
+
+}
+
 
 .content-area {
   width: 100%;
