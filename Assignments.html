@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="Assignments.css" rel="stylesheet">
+    <title>Course Assignment System</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+          <a class="navbar-brand"><img src="assets/icon.png" alt="icon"></a>
+          <span class="fw-bold text-white">KSU Smart Schedule</span>
+          
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-Home" href="AdministratorPage.html"><img src="assets/icons8-home-page-30.png"  alt="Home icon"></a></li>
+               <li class="nav-item"><a class="nav-link fw-bold" href="login.html"><img src="assets/logout.png"  alt="logout">Log out</a></li>
+            </ul>
+          </div>
+        
+      </nav>
+       <!-- Menu -->
+       <div class="container d-flex align-items-start" style="height: 100vh;">
+        <!-- Sidebar -->
+        <div class="menu p-4 shadow-lg d-flex align-items-start">
+            <ul class="list-group">
+                <li class="list-group-item bg-transparent border-0">
+                    <a href="load-schedule.html">
+                        <img src="assets/load.png" alt="Load & Schedule"> Load & Schedule
+                    </a>
+                </li>
+                <li class="list-group-item bg-transparent border-0">
+                    <a href="courses.html">
+                        <img src="assets/courses.png" alt="Courses"> Courses
+                    </a>
+                </li>
+                <li class="list-group-item bg-transparent border-0">
+                    <a href="manageRequests.html">
+                        <img src="assets/icons8-form-50.png" alt="Requests"> Requests
+                    </a>
+                </li>
+                <li class="list-group-item bg-transparent border-0 selected">
+                    <a href="assignments.html" class="active-link">
+                        <img src="assets/icons8-edit-property-50.png" alt="Assignments"> Assignments
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Course Assignment Section -->
+            <div class="container assignment-container" style="padding-top: 120px;">
+                <div class="assignment-section">
+                    <h2>Course Assignments</h2>
+                    
+                    <div class="assignment-interface" id="manual-interface">
+                        <div class="assignment-controls">
+                            <div class="filter-section">
+                                <h4>Filter Courses</h4>
+                                <div class="filter-controls">
+                                    <select id="course-type">
+                                        <option value="all">All Course Types</option>
+                                        <option value="lecture">Lecture</option>
+                                        <option value="tutorial">Tutorial</option>
+                                        <option value="lab">Lab</option>
+                                    </select>
+                                    <select id="faculty-type">
+                                        <option value="all">All Faculty</option>
+                                        <option value="professor">Professors</option>
+                                        <option value="ta">Teaching Assistants</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="search-section">
+                                <input type="text" id="course-search" placeholder="Search courses...">
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-grid">
+                            <div class="courses-column">
+                                <h4>Available Courses</h4>
+                                <div class="course-list" id="course-list">
+                                    <div class="course-item" data-id="1" data-type="lecture">
+                                        <div class="course-code">SWE211</div>
+                                        <div class="course-name">Introduction to Software Engineering</div>
+                                        <div class="course-hours">3 hours/week</div>
+                                        <div class="course-type">Lecture</div>
+                                    </div>
+                                    <div class="course-item" data-id="2" data-type="tutorial">
+                                        <div class="course-code">SWE 211</div>
+                                        <div class="course-name">Introduction to Software Engineering Tutorial</div>
+                                        <div class="course-hours">1 hour/week</div>
+                                        <div class="course-type">Tutorial</div>
+                                    </div>
+                                    <div class="course-item" data-id="3" data-type="lab">
+                                        <div class="course-code">SWE 314</div>
+                                        <div class="course-name">Software Security Engineering</div>
+                                        <div class="course-hours">1 hour/week</div>
+                                        <div class="course-type">Tutorial</div>
+                                    </div>
+                                    <div class="course-item" data-id="4" data-type="lecture">
+                                        <div class="course-code">SWE 312</div>
+                                        <div class="course-name">Software Requirements Engineering</div>
+                                        <div class="course-hours">3 hours/week</div>
+                                        <div class="course-type">Lecture</div>
+                                    </div>
+                                    <div class="course-item" data-id="5" data-type="tutorial">
+                                        <div class="course-code">SWE 381</div>
+                                        <div class="course-name">Web Application Development</div>
+                                        <div class="course-hours">1 hour/week</div>
+                                        <div class="course-type">Tutorial</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="faculty-column">
+                                <h4>Faculty Members</h4>
+                                <div class="faculty-list" id="faculty-list">
+                                    <div class="faculty-item" data-id="1" data-type="professor">
+                                        <div class="faculty-name">Dr. Manal Alonaizan</div>
+                                        <div class="faculty-role">Professor</div>
+                                        <div class="faculty-hours">Assigned: 5/12 hours</div>
+                                    </div>
+                                    <div class="faculty-item" data-id="2" data-type="professor">
+                                        <div class="faculty-name">Dr. Ohoud Alharbi</div>
+                                        <div class="faculty-role">Professor</div>
+                                        <div class="faculty-hours">Assigned: 3/12 hours</div>
+                                    </div>
+                                    <div class="faculty-item" data-id="3" data-type="ta">
+                                        <div class="faculty-name">Ms. Sarah Alhozaimy</div>
+                                        <div class="faculty-role">Teaching Assistant</div>
+                                        <div class="faculty-hours">Assigned: 4/6 hours</div>
+                                    </div>
+                                    <div class="faculty-item" data-id="4" data-type="ta">
+                                        <div class="faculty-name">Ms. Monira Aldolaimi</div>
+                                        <div class="faculty-role">Teaching Assistant</div>
+                                        <div class="faculty-hours">Assigned: 2/6 hours</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="assignments-column">
+                                <h4>Current Assignments</h4>
+                                <div class="assignments-list" id="assignments-list">
+                                    <!-- Empty by default -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-actions">
+                            <button class="btn-primary" id="assign-btn">Assign Selected</button>
+                            <button class="btn-secondary" id="clear-btn">Clear Selection</button>
+                            <button class="btn-suggest" id="suggest-btn">Generate Suggestions</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conflict Detection Section -->
+            <div class="container conflict-container">
+                <div class="conflict-section">
+                    <h2>Conflict Detection</h2>
+                    
+                    <!-- REMOVED: conflict-controls div with buttons -->
+                    
+                    <div class="conflict-results">
+                        <div class="conflict-category">
+                            <h4>Schedule Overlaps</h4>
+                            <div class="conflict-list" id="overlap-list">
+                                <div class="conflict-item">
+                                    <div class="conflict-details">
+                                        <span class="conflict-type">Time Conflict</span>
+                                        <span>SWE 211 (Mon 9-11) and SWE 333 (Mon 10-12) overlap</span>
+                                    </div>
+                                    <div class="conflict-actions">
+                                        <button class="btn-resolve">Resolve</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="conflict-category">
+                            <h4>Workload Overloads</h4>
+                            <div class="conflict-list" id="overload-list">
+                                <div class="conflict-item">
+                                    <div class="conflict-details">
+                                        <span class="conflict-type">Workload Exceeded</span>
+                                        <span>Dr. Weaam assigned 15 hours (max: 12)</span>
+                                    </div>
+                                    <div class="conflict-actions">
+                                        <button class="btn-resolve">Resolve</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="conflict-category">
+                            <h4>Unassigned Courses</h4>
+                            <div class="conflict-list" id="unassigned-list">
+                                <div class="conflict-item">
+                                    <div class="conflict-details">
+                                        <span class="conflict-type">Unassigned</span>
+                                        <span>SWE 444 has no instructor assigned</span>
+                                    </div>
+                                    <div class="conflict-actions">
+                                        <button class="btn-resolve">Assign</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Finalized Schedule Section -->
+            <div class="container finalized-schedule-container">
+                <div class="finalized-section">
+                    <h2>Finalized Schedule</h2>
+                    
+                    <div class="schedule-table">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Faculty</th>
+                                    <th>Schedule</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SWE 211</td>
+                                    <td>Introduction to Software Engineering</td>
+                                    <td>Dr. Manal Alonaizan</td>
+                                    <td>Mon, Wed 9:00-10:30</td>
+                                    <td><span class="status-confirmed">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>SWE 312</td>
+                                    <td>Software Requirements Engineering</td>
+                                    <td>Dr. Ohoud Alharbi</td>
+                                    <td>Sun, Tue 11:00-12:30</td>
+                                    <td><span class="status-confirmed">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>SWE 314</td>
+                                    <td>Software Security Engineering</td>
+                                    <td>Ms. Sarah Alhozaimy</td>
+                                    <td>Thu 8:00-9:00</td>
+                                    <td><span class="status-confirmed">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>SWE 381</td>
+                                    <td>Web Application Development</td>
+                                    <td>Ms. Monira Aldolaimi</td>
+                                    <td>Mon 14:00-15:00</td>
+                                    <td><span class="status-confirmed">Confirmed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="schedule-actions">
+                        <button class="btn-primary">Save changes</button>
+                        <button class="btn-secondary">Export to excel
+</button>
+                        <button class="btn-secondary">Finalize schedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer glass-nav fixed-bottom">
+        <div class="container d-flex flex-colum justify-content-center align-items-center">
+            <div class="footer-logo">
+                <img src="assets/Vision.png" alt="Vision 2030">
+            </div>
+            <p class="text-white">&copy; 2025 King Saud University</p>
+        </div>
+    </footer>
+
+    
+</body>
+</html>
