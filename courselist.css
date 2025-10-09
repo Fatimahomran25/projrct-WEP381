@@ -1,0 +1,117 @@
+
+body {
+  margin: 0;
+  background: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0,0,0,0.3) 100%),
+    url("assets/KSU1.jpg") center/cover no-repeat fixed;/*  هنا عشان اموج الصوره واخلي فيها*/
+}
+ .nav-item .nav-link img{
+  width: 30px;
+  height: 30px;
+ }
+
+/* الكومنت لنا  */
+  .navbar {
+  background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
+}
+
+.navbar-brand,.nav-link {
+  color: white ;
+}
+
+ /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
+.nav-link:hover {
+  color: #5f5c5c; /* لون عند المرور */
+}
+ .navbar-brand img{
+  width: 70px;
+  height:70px;
+ }
+
+.container .menu{
+ 
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10%;
+  margin-right: 10%;
+  
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+  
+}
+.container .menu ul a{
+    color: aliceblue;
+    text-decoration: none;
+    
+
+}
+.container .menu ul img{
+   
+    width: 20px;
+    height: 20px;
+
+}
+
+
+.container .welcom{
+  width: 90%;
+  height: auto;
+  display: block;
+  margin-top: 12%;
+  text-align: center;
+  flex-direction: column;
+  margin-bottom: 5%;
+  text-align: center;
+
+
+  color: aliceblue;
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيفb order  شبه شفاف */
+}
+.container .welcom img{
+  width: 40px;
+  margin: 7px 0 0 7px;
+}
+.container .welcom h1{
+  
+  margin-top: 60px;
+}
+.container .welcom h4{
+  
+  margin-top: 40px;
+}
+
+.glass-nav {
+  background:  rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+}
+.footer-logo img{
+  width: 70px;
+
+}
+.footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around !important;
+  align-items: center;
+  
+ 
+}
+
+.menu .list-group-item.selected {
+  background: rgba(60, 98, 204, 0.7) !important;
+  border-radius: 10px;
+}
+
+
+.nav-item .nav-Home img {
+width: 29px;
+height: 29px;
+margin-top: 8px;
+}
