@@ -1,73 +1,64 @@
 body {
-    margin: 0;
+  margin: 0;
   background: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0,0,0,0.3) 100%),url("assets/KSU1.jpg") center/cover no-repeat fixed;;/*  هنا عشان اموج الصوره واخلي فيها*/
+    linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0,0,0,0.3) 100%),
+    url("assets/KSU1.jpg") center/cover no-repeat fixed;/*  هنا عشان اموج الصوره واخلي فيها*/
 }
-
-/*Navbar Design*/
  .nav-item .nav-link img{
   width: 30px;
   height: 30px;
  }
-.navbar {
+
+/* الكومنت لنا  */
+  .navbar {
   background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
 }
+
 .navbar-brand,.nav-link {
   color: white ;
 }
+
+ /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
 .nav-link:hover {
-  color: #5f5c5c;
+  color: #5f5c5c; /* لون عند المرور */
 }
  .navbar-brand img{
-  width: 50px;
-  height:50px;
+  width: 70px;
+  height:70px;
  }
- .nav-item .nav-Home img {
+
+.container .menu{
+ 
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10%;
+  margin-right: 10%;
+  
+  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
+  background: rgba(89, 86, 86, 0.15); 
+  backdrop-filter: blur(10px);           /* يموّه الخلفية */
+  border-radius: 15px;                   /* زوايا  */
+  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+  
+}
+.container .menu ul a{
+    color: aliceblue;
+    text-decoration: none;
+    
+
+}
+.container .menu ul img{
+   
+    width: 20px;
+    height: 20px;
+
+}
+.nav-item .nav-Home img {
   width: 29px;
   height: 29px;
   margin-top: 8px;
  }
  
- /*Container class design*/
-.container .menu{
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 10%;
-  margin-right: 10%;
-  /*  الشفافية  تمويه عشان لوق ان*/
-  background: rgba(89, 86, 86, 0.15); 
-  backdrop-filter: blur(10px);           /* يموّه الخلفية */
-  border-radius: 15px;                   /* زوايا  */
-  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
-}
-.container .menu ul a{
-    color: aliceblue;
-    text-decoration: none;
-}
-.container .menu ul img{
-    width: 20px;
-    height: 20px;
-}
-
-
-}
-
-/*  for the page Content */
-.page-content {
-  background: rgba(89, 86, 86, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  margin-top: 100px;
-  margin-bottom:60px;
-  border: 1px solid rgba(70, 68, 68, 0.3);
-  padding: 40px;
-  flex:1; /*عشان تاخذ باقي المساحة وتصير جنب المنيو بدل ما تنزل تحته */
-  width: 70%;
-  text-align: center;
-  color: white;
-}
-
-
 /*Footer*/
 .glass-nav {
   background:  rgba(0, 0, 0, 0.3);
@@ -86,396 +77,398 @@ body {
   bottom: 0;
   width: 100%;
 }
-
-
-/* Section Styles */
+/* Section Styles - Smaller */
 .assignment-section,
 .conflict-section,
 .finalize-section {
-  width: 100%;
-  color: aliceblue;
-  background: rgba(89, 86, 86, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  border: 1px solid rgba(70, 68, 68, 0.3);
-  padding: 30px;
-  margin-bottom: 20px;
+width: 100%;
+color: aliceblue;
+background: rgba(89, 86, 86, 0.15);
+backdrop-filter: blur(10px);
+border-radius: 12px; /* Smaller radius */
+border: 1px solid rgba(70, 68, 68, 0.3);
+padding: 20px; /* Reduced padding */
+margin-bottom: 15px; /* Smaller margin */
 }
 
 h2 {
-  color: aliceblue;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  font-size: 1.8rem;
+color: aliceblue;
+margin-bottom: 20px; /* Reduced */
+padding-bottom: 12px; /* Reduced */
+border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+font-size: 1.5rem; /* Smaller font */
 }
 
 h3, h4 {
-  color: aliceblue;
-  margin-bottom: 15px;
+color: aliceblue;
+margin-bottom: 12px; /* Reduced */
+font-size: 1.1rem; /* Smaller font */
 }
 
-/* Buttons */
+/* Buttons - Smaller */
 button {
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  color: white;
+padding: 10px 20px; /* Smaller padding */
+border: none;
+border-radius: 6px; /* Smaller radius */
+cursor: pointer;
+font-weight: 600;
+transition: all 0.3s ease;
+color: white;
+font-size: 0.9rem; /* Smaller font */
 }
 
 .btn-primary {
-  background: rgba(89, 86, 86, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+background: rgba(89, 86, 86, 0.3);
+border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary:hover {
-  background: rgba(89, 86, 86, 0.5);
-  color: #5f5c5c;
+background: rgba(89, 86, 86, 0.5);
+color: #5f5c5c;
 }
 
 .btn-secondary {
-  background: rgba(70, 68, 68, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+background: rgba(70, 68, 68, 0.4);
+border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  background: rgba(70, 68, 68, 0.6);
-  color: #5f5c5c;
+background: rgba(70, 68, 68, 0.6);
+color: #5f5c5c;
 }
 
 .btn-suggest {
-  background: rgba(46, 204, 113, 0.3);
-  border: 1px solid rgba(46, 204, 113, 0.5);
+background: rgba(46, 204, 113, 0.3);
+border: 1px solid rgba(46, 204, 113, 0.5);
 }
 
 .btn-suggest:hover {
-  background: rgba(46, 204, 113, 0.5);
+background: rgba(46, 204, 113, 0.5);
 }
 
 .btn-remove {
-  background-color: rgba(231, 76, 60, 0.3);
-  padding: 8px 15px;
-  font-size: 0.8rem;
+background-color: rgba(231, 76, 60, 0.3);
+padding: 6px 12px; /* Smaller padding */
+font-size: 0.75rem; /* Smaller font */
 }
 
 .btn-remove:hover {
-  background-color: rgba(231, 76, 60, 0.5);
+background-color: rgba(231, 76, 60, 0.5);
 }
 
 .btn-resolve {
-  background-color: rgba(52, 152, 219, 0.3);
-  padding: 8px 15px;
-  font-size: 0.8rem;
+background-color: rgba(52, 152, 219, 0.3);
+padding: 6px 12px; /* Smaller padding */
+font-size: 0.75rem; /* Smaller font */
 }
 
 .btn-resolve:hover {
-  background-color: rgba(52, 152, 219, 0.5);
+background-color: rgba(52, 152, 219, 0.5);
 }
 
-/* Assignment Interface */
+/* Assignment Interface - Smaller */
 .assignment-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+display: flex;
+justify-content: space-between;
+margin-bottom: 20px; /* Reduced */
+padding-bottom: 15px; /* Reduced */
+border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .filter-controls {
-  display: flex;
-  gap: 15px;
+display: flex;
+gap: 12px; /* Reduced gap */
 }
 
 .filter-controls select, #course-search {
-  padding: 10px 15px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  background: rgba(89, 86, 86, 0.2);
-  color: white;
-  backdrop-filter: blur(10px);
+padding: 8px 12px; /* Smaller padding */
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: 6px; /* Smaller radius */
+background: rgba(89, 86, 86, 0.2);
+color: white;
+backdrop-filter: blur(10px);
+font-size: 0.9rem; /* Smaller font */
 }
 
 .filter-controls select option {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+background: rgba(0, 0, 0, 0.8);
+color: white;
 }
 
 #course-search::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+color: rgba(255, 255, 255, 0.6);
 }
 
 .assignment-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 25px;
-  margin-bottom: 25px;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 20px; /* Reduced gap */
+margin-bottom: 20px; /* Reduced */
 }
 
 .courses-column, .faculty-column, .assignments-column {
-  background: rgba(89, 86, 86, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  border: 1px solid rgba(70, 68, 68, 0.3);
-  padding: 20px;
-  max-height: 400px;
-  overflow-y: auto;
+background: rgba(89, 86, 86, 0.1);
+backdrop-filter: blur(10px);
+border-radius: 12px; /* Smaller radius */
+border: 1px solid rgba(70, 68, 68, 0.3);
+padding: 15px; /* Reduced padding */
+max-height: 350px; /* Smaller height */
+overflow-y: auto;
 }
 
 .course-list, .faculty-list, .assignments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+display: flex;
+flex-direction: column;
+gap: 12px; /* Reduced gap */
 }
 
 .course-item, .faculty-item, .assignment-item, .conflict-item {
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: rgba(89, 86, 86, 0.1);
+padding: 12px; /* Reduced padding */
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 8px; /* Smaller radius */
+transition: all 0.3s ease;
+display: flex;
+flex-direction: column;
+gap: 6px; /* Reduced gap */
+background: rgba(89, 86, 86, 0.1);
 }
 
 .course-item:hover, .faculty-item:hover {
-  background-color: rgba(89, 86, 86, 0.3);
-  cursor: pointer;
+background-color: rgba(89, 86, 86, 0.3);
+cursor: pointer;
 }
 
 .course-item.selected, .faculty-item.selected {
-  border-color: rgba(255, 255, 255, 0.4);
-  background-color: rgba(89, 86, 86, 0.4);
+border-color: rgba(255, 255, 255, 0.4);
+background-color: rgba(89, 86, 86, 0.4);
 }
 
 .course-code, .faculty-name, .assignment-course {
-  font-weight: bold;
-  color: aliceblue;
-  font-size: 1.1rem;
+font-weight: bold;
+color: aliceblue;
+font-size: 1rem; /* Smaller font */
 }
 
 .course-type, .faculty-role {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
+font-size: 0.75rem; /* Smaller font */
+color: rgba(255, 255, 255, 0.7);
+text-transform: uppercase;
 }
 
 .course-hours, .faculty-hours {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+font-size: 0.85rem; /* Smaller font */
+color: rgba(255, 255, 255, 0.7);
 }
 
 .assignment-item, .conflict-item {
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
 }
 
 .assignment-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
+display: flex;
+gap: 12px; /* Reduced gap */
+justify-content: center;
+flex-wrap: wrap;
 }
 
-/* Conflict Detection */
+/* Conflict Detection - Smaller */
 .conflict-controls {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
+display: flex;
+gap: 12px; /* Reduced gap */
+margin-bottom: 20px; /* Reduced */
 }
 
 .conflict-category {
-  margin-bottom: 25px;
+margin-bottom: 20px; /* Reduced */
 }
 
 .conflict-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+display: flex;
+flex-direction: column;
+gap: 12px; /* Reduced gap */
 }
 
 .conflict-details {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+display: flex;
+flex-direction: column;
+gap: 6px; /* Reduced gap */
 }
 
 .conflict-type {
-  font-weight: bold;
-  font-size: 0.9rem;
-  padding: 5px 10px;
-  border-radius: 5px;
-  display: inline-block;
-  width: fit-content;
-  background-color: rgba(243, 156, 18, 0.3);
-  color: white;
+font-weight: bold;
+font-size: 0.85rem; /* Smaller font */
+padding: 4px 8px; /* Smaller padding */
+border-radius: 4px; /* Smaller radius */
+display: inline-block;
+width: fit-content;
+background-color: rgba(243, 156, 18, 0.3);
+color: white;
 }
 
-/* Finalize Schedule */
+/* Finalize Schedule - Smaller */
 .finalize-controls {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
+display: flex;
+gap: 12px; /* Reduced gap */
+margin-bottom: 20px; /* Reduced */
 }
 
 .schedule-status {
-  display: flex;
-  gap: 40px;
+display: flex;
+gap: 30px; /* Reduced gap */
 }
 
 .status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .status-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 8px;
+font-size: 0.85rem; /* Smaller font */
+color: rgba(255, 255, 255, 0.7);
+margin-bottom: 6px; /* Reduced */
 }
 
 .status-value {
-  font-weight: bold;
-  font-size: 1.3rem;
-  color: aliceblue;
+font-weight: bold;
+font-size: 1.1rem; /* Smaller font */
+color: aliceblue;
 }
 
 #schedule-status.finalized {
-  color: rgba(46, 204, 113, 0.8);
+color: rgba(46, 204, 113, 0.8);
 }
 
-/*Footer*/
+/*Footer - Smaller*/
 .glass-nav {
-  background:  rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
+background:  rgba(0, 0, 0, 0.3);
+backdrop-filter: blur(6px);
 }
 .footer-logo img{
-  width: 70px;
-
+width: 60px; /* Smaller logo */
 }
 .footer{
-  display: flex;
-  justify-content: space-around !important;
-  align-items: center;
-  /*عشان اثبته تحت رغم تحرك المحتوى وحجمه*/
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+display: flex;
+justify-content: space-around !important;
+align-items: center;
+position: fixed;
+bottom: 0;
+width: 100%;
+padding: 10px 0; /* Smaller padding */
+}
+
+/* Finalized Schedule Section - Smaller */
+.finalized-schedule-container {
+width: 95%;
+display: block;
+margin-top: 15px; /* Reduced */
+margin-bottom: 80px; /* Reduced */
+}
+
+.finalized-section {
+width: 100%;
+color: aliceblue;
+background: rgba(89, 86, 86, 0.15);
+backdrop-filter: blur(10px);
+border-radius: 12px; /* Smaller radius */
+border: 1px solid rgba(70, 68, 68, 0.3);
+padding: 20px; /* Reduced padding */
+margin-bottom: 15px; /* Reduced */
+}
+
+/* Schedule Table - Smaller */
+.schedule-table {
+margin-bottom: 20px; /* Reduced */
+}
+
+.table {
+width: 100%;
+color: white;
+background: rgba(89, 86, 86, 0.1);
+border-radius: 8px; /* Smaller radius */
+overflow: hidden;
+font-size: 0.9rem; /* Smaller font */
+}
+
+.table th {
+background: rgba(89, 86, 86, 0.3);
+color: white;
+border: none;
+padding: 12px; /* Reduced padding */
+font-weight: 600;
+}
+
+.table td {
+background: rgba(89, 86, 86, 0.1);
+color: white;
+border: none;
+padding: 10px 12px; /* Reduced padding */
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+background: rgba(89, 86, 86, 0.05);
+}
+
+/* Status Badges - Smaller */
+.status-confirmed {
+background: rgba(46, 204, 113, 0.3);
+color: white;
+padding: 4px 10px; /* Smaller padding */
+border-radius: 12px; /* Smaller radius */
+font-size: 0.75rem; /* Smaller font */
+border: 1px solid rgba(46, 204, 113, 0.5);
+}
+
+/* Schedule Actions - Smaller */
+.schedule-actions {
+display: flex;
+gap: 12px; /* Reduced gap */
+justify-content: center;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .assignment-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .schedule-status {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .assignment-controls {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .filter-controls {
-    flex-direction: column;
-  }
-  
-  .finalize-controls, .conflict-controls, .assignment-actions {
-    flex-direction: column;
-  }
+.assignment-grid {
+  grid-template-columns: 1fr;
+}
+
+.schedule-status {
+  flex-direction: column;
+  gap: 15px; /* Reduced gap */
+}
+
+.assignment-controls {
+  flex-direction: column;
+  gap: 12px; /* Reduced gap */
+}
+
+.filter-controls {
+  flex-direction: column;
+}
+
+.finalize-controls, .conflict-controls, .assignment-actions {
+  flex-direction: column;
+}
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+width: 6px; /* Smaller scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+background: rgba(255, 255, 255, 0.1);
+border-radius: 8px; /* Smaller radius */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+background: rgba(255, 255, 255, 0.3);
+border-radius: 8px; /* Smaller radius */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-/* Finalized Schedule Section */
-.finalized-schedule-container {
-  width: 95%;
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 100px;
-}
-
-.finalized-section {
-  width: 100%;
-  color: aliceblue;
-  background: rgba(89, 86, 86, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  border: 1px solid rgba(70, 68, 68, 0.3);
-  padding: 30px;
-  margin-bottom: 20px;
-}
-
-/* Schedule Table */
-.schedule-table {
-  margin-bottom: 25px;
-}
-
-.table {
-  width: 100%;
-  color: white;
-  background: rgba(89, 86, 86, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.table th {
-  background: rgba(89, 86, 86, 0.3);
-  color: white;
-  border: none;
-  padding: 15px;
-  font-weight: 600;
-}
-
-.table td {
-  background: rgba(89, 86, 86, 0.1);
-  color: white;
-  border: none;
-  padding: 12px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background: rgba(89, 86, 86, 0.05);
-}
-
-/* Status Badges */
-.status-confirmed {
-  background: rgba(46, 204, 113, 0.3);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  border: 1px solid rgba(46, 204, 113, 0.5);
-}
-
-/* Schedule Actions */
-.schedule-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
+background: rgba(255, 255, 255, 0.5);
+}  
