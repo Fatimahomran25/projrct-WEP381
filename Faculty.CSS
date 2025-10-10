@@ -1,28 +1,24 @@
-
 body {
   margin: 0;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 30%, rgba(0, 0, 0, 0.3) 100%),
-              url("assets/KSU1.jpg") center/cover no-repeat fixed;
+  url("assets/KSU1.jpg") center/cover no-repeat fixed;
 }
 
-/* Navbar */
  .nav-item .nav-link img{
   width: 30px;
   height: 30px;
  }
 
-/* الكومنت لنا  */
   .navbar {
-  background-color: rgba(0, 0, 0, 0.3) ; /* هنا خليتnav  شفاف */
+  background-color: rgba(0, 0, 0, 0.3) ;
 }
 
 .navbar-brand,.nav-link {
   color: white ;
 }
 
- /*   هذا اذا صغرتي الشاشه وحطيتي السهم (مهم التوحيد )   */
 .nav-link:hover {
-  color: #5f5c5c; /* لون عند المرور */
+  color: #5f5c5c; 
 }
  .navbar-brand img{
   width: 70px;
@@ -36,11 +32,10 @@ body {
   margin-top: 10%;
   margin-right: 10%;
   
-  /* (مهم توحيد) الشفافية  تمويه عشان لوق ان*/
   background: rgba(89, 86, 86, 0.15); 
-  backdrop-filter: blur(10px);           /* يموّه الخلفية */
-  border-radius: 15px;                   /* زوايا  */
-  border: 1px solid rgba(70, 68, 68, 0.3); /* خط خفيف شبه شفاف */
+  backdrop-filter: blur(10px);          
+  border-radius: 15px;                  
+  border: 1px solid rgba(70, 68, 68, 0.3);
   
 }
 .container .menu ul a{
@@ -79,7 +74,6 @@ body {
   text-align: center;
 }
 
-/* Footer */
 .footer {
   display: flex;
   flex-direction: row;
@@ -89,3 +83,4 @@ body {
 .footer-logo img {
   width: 70px;
 }
+
