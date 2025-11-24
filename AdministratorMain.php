@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+// حماية الصفحة – أدمن فقط
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
+    header("Location: login.php");
+    exit;
+}
+
+// نكوّن الاسم الكامل
+$first  = $_SESSION['FName'] ?? '';
+$middle = $_SESSION['MName'] ?? '';
+$last   = $_SESSION['LName'] ?? '';
+
+$fullName = $first;
+
+// إذا الميد نيم مو فاضي، ضيفيه
+if (!empty($middle)) {
+    $fullName .= ' ' . $middle;
+}
+
+$fullName .= ' ' . $last;
+$fullName = trim($fullName);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +44,7 @@
       
         <ul class="navbar-nav ms-auto">
           
-           <li class="nav-item"><a class="nav-link fw-bold" href="login.html"><img src="assets/logout.png"  alt="logout">Log out</a></li>
+           <li class="nav-item"><a class="nav-link fw-bold" href="logout.php"><img src="assets/logout.png"  alt="logout">Log out</a></li>
         </ul>
       </div>
     
@@ -31,25 +57,25 @@
   <ul class="list-group  ">
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="ManageLoadANDUploadScedule.HTML">
+      <a href="ManageLoadANDUploadScedule.php">
         <img src="assets/load.png" alt="icon Load & Schedule" > Load & Schedule
       </a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="ManageCourseList.html">
+      <a href="ManageCourseList.php">
         <img src="assets/courses.png" alt="icon Courses" > Courses
       </a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="ManageRequests.html">
+      <a href="ManageRequests.php">
         <img src="assets/icons8-form-50.png" alt="icom Requests"> Requests
       </a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="CourseAssignmentANDConflictDetection.html">
+      <a href="CourseAssignmentANDConflictDetection.php">
         <img src="assets/icons8-edit-property-50.png" alt="icon Assignments  Conflicts"> Assignments 
       </a>
     </li>
@@ -60,7 +86,8 @@
 <div class="welcom  shadow-lg " >
     
     <img src="assets/icons8-admin-64.png" alt="icons admin" >
-    <h1 >Welcome Back Manal Alonaizan</h1>
+    <h1>Welcome Back <?php echo htmlspecialchars($fullName); ?></h1>
+
     <h4>Admin Dashboard</h4>
     
 

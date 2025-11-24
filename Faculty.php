@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +28,7 @@
 
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link fw-bold" href="login.html">
+            <a class="nav-link fw-bold" href="logout.php">
               <img src="assets/logout.png" alt="logout"> Log out
             </a>
           </li>

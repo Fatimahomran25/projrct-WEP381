@@ -39,7 +39,10 @@ margin-bottom: 20px;
   
   
 }
- .navbar-brand img{
+  .container .navbar-brand{
+    
+  }
+ .container .navbar-brand  img{
   width: 59px;
   height:50px;
  }
