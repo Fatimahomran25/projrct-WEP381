@@ -1,3 +1,14 @@
+
+<?php
+session_start();
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head >
@@ -14,7 +25,7 @@
       <a class="navbar-brand"><img src="assets/icon.png" alt="icon"></a>
       <span class="fw-bold text-white">KSU Smart Schedule</span>
         <ul class="navbar-nav ms-auto">
-           <li class="nav-item"><a class="nav-Home" href="AdministratorMain.html"><img src="assets/icons8-home-page-30.png"  alt="Home icon"></a></li>
+           <li class="nav-item"><a class="nav-Home" href="AdministratorMain.php"><img src="assets/icons8-home-page-30.png"  alt="Home icon"></a></li>
            <li class="nav-item"><a class="nav-link fw-bold" href="logout.php"><img src="assets/logout.png"  alt="logout">Log out</a></li>
         </ul>
     </div>
@@ -27,19 +38,19 @@
   <ul class="list-group  ">
 
     <li class="list-group-item bg-transparent border-0 selected">
-      <a href="ManageLoadANDUploadScedule.HTML"><img src="assets/load.png" alt="icon Load & Schedule" > Load & Schedule</a>
+      <a href="ManageLoadANDUploadScedule.php"><img src="assets/load.png" alt="icon Load & Schedule" > Load & Schedule</a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="ManageCourseList.html"><img src="assets/courses.png" alt="icon Courses" > Courses</a>
+      <a href="ManageCourseList.php"><img src="assets/courses.png" alt="icon Courses" > Courses</a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="ManageRequests.html"><img src="assets/icons8-form-50.png" alt="icom Requests"> Requests</a>
+      <a href="ManageRequests.php"><img src="assets/icons8-form-50.png" alt="icom Requests"> Requests</a>
     </li>
 
     <li class="list-group-item bg-transparent border-0">
-      <a href="CourseAssignmentANDConflictDetection.html">
+      <a href="CourseAssignmentANDConflictDetection.php">
         <img src="assets/icons8-edit-property-50.png" alt="icon Assignments  Conflicts"> Assignments 
       </a>
     </li>

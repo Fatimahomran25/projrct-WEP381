@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +25,7 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-Home" href="AdministratorMain.html">
+                <a class="nav-Home" href="AdministratorMain.php">
                   <img src="assets/icons8-home-page-30.png" alt="Home icon">
                 </a>
               </li>
@@ -37,25 +46,25 @@
         <div class="menu p-4 shadow-lg align-items-start">
           <ul class="list-group">
             <li class="list-group-item bg-transparent border-0">
-              <a href="ManageLoadANDUploadScedule.HTML">
+              <a href="ManageLoadANDUploadScedule.php">
                 <img src="assets/load.png" alt="icon Load & Schedule"> Load & Schedule
               </a>
             </li>
     
             <li class="list-group-item bg-transparent border-0">
-              <a href="ManageCourseList.html">
+              <a href="ManageCourseList.php">
                 <img src="assets/courses.png" alt="icon Courses"> Courses
               </a>
             </li>
     
             <li class="list-group-item bg-transparent border-0">
-              <a href="ManageRequests.html">
+              <a href="ManageRequests.php">
                 <img src="assets/icons8-form-50.png" alt="icon Requests"> Requests
               </a>
             </li>
     
             <li class="list-group-item bg-transparent border-0 selected">
-              <a href="CourseAssignmentANDConflictDetection.html">
+              <a href="CourseAssignmentANDConflictDetection.php">
                 <img src="assets/icons8-edit-property-50.png" alt="icon Assignments"> Assignments
               </a>
             </li>
