@@ -26,7 +26,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
         <span class="fw-bold text-white">KSU Smart Schedule</span>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-Home" href="AdministratorMain.php"><img src="assets/icons8-home-page-30.png" alt="Home icon"></a></li>
-            <li class="nav-item"><a class="nav-link fw-bold" href="login.php"><img src="assets/logout.png" alt="logout">Log out</a></li>
+            <li class="nav-item"><a class="nav-link fw-bold" href="logout.php"><img src="assets/logout.png" alt="logout">Log out</a></li>
         </ul>
     </div>
 </nav>
