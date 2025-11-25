@@ -197,7 +197,18 @@ body {
   background-color: #9fa5aea3;
   color: white;
 }
+.upload-wrapper {
+    margin-top: 0;
+}
 
+.mt-3 {
+  margin-top: 0.5rem !important; /* بدل 1rem */
+}
+
+.upload-wrapper .card {
+  width: 800px; 
+  max-width: 90vw; 
+}
 /* ===== MODAL & FORM STYLES ===== */
 .modal-content {
   background: rgba(89, 86, 86, 0.95);
