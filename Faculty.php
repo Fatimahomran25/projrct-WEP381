@@ -97,61 +97,61 @@ function partial_load($full) {
 
 $ALL_SEMESTER_COURSE_DATA = [];
 
-$courseQ = "
-    SELECT sc.courseCode, sc.name, sc.lectureHours, sc.tutorialHours, sc.labHours, sc.noSessionHours
-    FROM swecourses sc
-    ORDER BY sc.courseCode ASC
-";
-$stmtCourseAll = mysqli_prepare($conn, $courseQ);
-$courseListAll = [];
-if ($stmtCourseAll) {
-    mysqli_stmt_execute($stmtCourseAll);
-    $courseR = mysqli_stmt_get_result($stmtCourseAll);
-    if ($courseR) {
-        while ($row = mysqli_fetch_assoc($courseR)) {
-            
-            $courseCode = $row['courseCode'];
-            $lectureHours = intval($row['lectureHours']);
-            $tutorialHours = intval($row['tutorialHours']);
-            $labHours = intval($row['labHours']);
-            $noSessionHours = intval($row['noSessionHours']);
-
-            if ($courseCode === 'SWE 496' || $courseCode === 'SWE 497') {
-                $totalHours = 3;
-                $hoursDisplay = "3 hrs ";
-                
-                $lectureHours = 0;
-                $tutorialHours = 0;
-                $labHours = 0;
-            } else {
-
-              $totalHours = $lectureHours + $tutorialHours + $labHours + $noSessionHours;
-                
-                $parts = [];
-                if ($lectureHours > 0) $parts[] = "Lecture " . $lectureHours;
-                if ($tutorialHours > 0) $parts[] = "Tutorial " . $tutorialHours;
-                if ($labHours > 0) $parts[] = "Lab " . $labHours;
-                $hoursDisplay = implode(" + ", $parts);
-                if ($hoursDisplay === "") $hoursDisplay = "No scheduled hours";
-            }
-
-            $courseListAll[] = [
-                'CourseCode' => $courseCode,
-                'CourseName' => $row['name'],
-                'HoursDisplay' => $hoursDisplay,
-                'LectureHours' => $lectureHours,
-                'TutorialHours' => $tutorialHours,
-                'LabHours' => $labHours,
-                'TotalHours' => $totalHours 
-            ];
-        }
-    }
-    mysqli_stmt_close($stmtCourseAll);
-}
-
 foreach ($allSemesters as $sem) {
     $semesterID = intval($sem['ID']);
-    $ALL_SEMESTER_COURSE_DATA[$semesterID] = $courseListAll;
+    $courseListLocal = [];
+
+    $courseQ = "
+        SELECT sc.courseCode, sc.name, sc.lectureHours, sc.tutorialHours, sc.labHours, sc.noSessionHours
+        FROM swecourses sc
+        ORDER BY sc.courseCode ASC
+    ";
+    $stmtCourseAll = mysqli_prepare($conn, $courseQ);
+    $courseR = mysqli_stmt_get_result($stmtCourseAll);
+    if ($stmtCourseAll) {
+        mysqli_stmt_execute($stmtCourseAll);
+        $courseR = mysqli_stmt_get_result($stmtCourseAll);
+        if ($courseR) {
+            while ($row = mysqli_fetch_assoc($courseR)) {
+                
+                $courseCode = $row['courseCode'];
+                $lectureHours = intval($row['lectureHours']);
+                $tutorialHours = intval($row['tutorialHours']);
+                $labHours = intval($row['labHours']);
+                $noSessionHours = intval($row['noSessionHours']);
+
+                if ($courseCode === 'SWE 496' || $courseCode === 'SWE 497' || $courseCode === 'GP1' || $courseCode === 'GP2') {
+                    $totalHours = 3;
+                    $hoursDisplay = "3 hrs (Fixed Load)";
+                    $lectureHours = 0;
+                    $tutorialHours = 0;
+                    $labHours = 0;
+                } else {
+                    $totalHours = $lectureHours + $tutorialHours + $labHours + $noSessionHours;
+                    
+                    $parts = [];
+                    if ($lectureHours > 0) $parts[] = "Lecture " . $lectureHours;
+                    if ($tutorialHours > 0) $parts[] = "Tutorial " . $tutorialHours;
+                    if ($labHours > 0) $parts[] = "Lab " . $labHours;
+                    $hoursDisplay = implode(" + ", $parts);
+                    if ($hoursDisplay === "") $hoursDisplay = "No scheduled hours";
+                }
+                // --- END Override ---
+
+                $courseListLocal[] = [
+                    'CourseCode' => $courseCode,
+                    'CourseName' => $row['name'],
+                    'HoursDisplay' => $hoursDisplay,
+                    'LectureHours' => $lectureHours,
+                    'TutorialHours' => $tutorialHours,
+                    'LabHours' => $labHours,
+                    'TotalHours' => $totalHours 
+                ];
+            }
+        }
+        mysqli_stmt_close($stmtCourseAll);
+    }
+    $ALL_SEMESTER_COURSE_DATA[$semesterID] = $courseListLocal;
 }
 
 $actionSemesterID = 0;
@@ -165,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $availability_raw = $_POST['availability'] ?? '';
     $courseRanks = $_POST['rank'] ?? []; 
     $actionSemesterID = intval($_POST['semester_id'] ?? 0); 
+    $reason_raw = $_POST['availability_reason'] ?? ''; 
     
     $actionSemesterName = "N/A";
     $isSubmissionOpen = false;
@@ -172,8 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($actionSemesterID === 0) {
         $submissionMessage = "Submission failed: Semester ID is missing.";
     } else {
-
-      $semInfo = null;
+        // Find semester details from pre-loaded array
+        $semInfo = null;
         foreach ($allSemesters as $s) {
             if (intval($s['ID']) === $actionSemesterID) {
                 $semInfo = $s;
@@ -225,6 +226,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $submissionMessage = "Invalid academic rank selected.";
                 }
             }
+            
+            if (($availability === 'P' || $availability === 'U') && trim($reason_raw) === '') {
+                $submissionMessage = "Reason for partial availability or unavailability is required.";
+            }
+
 
             $validatedPrefs = [];
             if (empty($submissionMessage) && $availability !== 'U') {
@@ -278,6 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $form_auto = is_auto_increment($conn, 'form', 'FormID');
                     $formID = $form_auto ? null : next_id($conn, 'form', 'FormID');
 
+                   
                     $cols = $form_auto ? "FacultyID, SemesterID, availability, {$academicRankCol}, {$maxHoursCol}" : "FormID, FacultyID, SemesterID, availability, {$academicRankCol}, {$maxHoursCol}";
                     $placeholders = $form_auto ? "?, ?, ?, ?, ?" : "?, ?, ?, ?, ?, ?";
                     $bindTypes = $form_auto ? "iissi" : "iiissi";
@@ -399,12 +406,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $semesterID = intval($sem['ID']);
                             $semesterName = htmlspecialchars($sem['name']);
                             
-                            // Determine status
                             $isActiveForLoad = intval($sem['isActiveForLoadRequest']) === 1;
                             $isAvailableForFaculty = intval($sem['isAvailableForFaculty']) === 1;
                             $isSubmissionOpen = $isActiveForLoad && $isAvailableForFaculty;
 
-                            // Check submission status for THIS specific semester
                             $isFormSubmittedLocal = false;
                             $checkQ = "SELECT FormID FROM form WHERE FacultyID = ? AND SemesterID = ? LIMIT 1";
                             $checkStmt = mysqli_prepare($conn, $checkQ); 
@@ -418,7 +423,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 mysqli_stmt_close($checkStmt);
                             }
 
-                            // Determine display message and button state
                             if ($isFormSubmittedLocal) {
                                 $statusText = "Submitted";
                                 $statusClass = "text-success";
@@ -439,7 +443,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $buttonClass = 'btn-secondary';
                             }
 
-                            // Get course details for this semester for the client-side
                             $currentCourseList = $ALL_SEMESTER_COURSE_DATA[$semesterID];
                             $currentTotalCount = count($currentCourseList);
                         ?>
@@ -514,6 +517,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <input class="form-check-input" type="radio" name="availability" id="avail_none_<?php echo $semesterID; ?>" value="unavailable" onchange="updateUIState(<?php echo $semesterID; ?>)">
                                             <label class="form-check-label" for="avail_none_<?php echo $semesterID; ?>">Unavailable: On leave </label>
                                         </div>
+                                        
+                                        <div id="reason-box-<?php echo $semesterID; ?>" style="display:none; margin-top: 10px;">
+                                            <label for="availability_reason_<?php echo $semesterID; ?>" class="form-label small">Reason (Required):</label>
+                                            <textarea class="form-control form-control-sm" name="availability_reason" id="availability_reason_<?php echo $semesterID; ?>" rows="2" maxlength="255"></textarea>
+                                        </div>
+                                        
                                     </fieldset>
 
                                     <div id="course-preferences-container-<?php echo $semesterID; ?>">
@@ -685,6 +694,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const isTA = (rank === 'Teaching Assistant');
             const table = document.getElementById(`course-preference-table-${semesterID}`);
             
+            // Get the reason box element
+            const reasonBox = document.getElementById(`reason-box-${semesterID}`);
+            const reasonInput = document.getElementById(`availability_reason_${semesterID}`);
+
+            // 1. Handle Reason Box Visibility
+            if (availability === 'Partially' || availability === 'unavailable') {
+                if (reasonBox) reasonBox.style.display = 'block';
+                // Add required attribute for validation only when visible
+                if (reasonInput) reasonInput.setAttribute('required', 'required');
+            } else {
+                if (reasonBox) reasonBox.style.display = 'none';
+                // Remove required attribute when hidden
+                if (reasonInput) reasonInput.removeAttribute('required');
+            }
+
+
+            // 2. Handle Course Table Visibility (if unavailable, hide table)
             if (table) {
                 const rows = table.querySelectorAll('tbody tr');
                 
@@ -744,18 +770,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             const rankSel = document.getElementById(`academic-rank-${semesterID}`);
             const selectedRank = getAcademicRankValue(semesterID);
+            const availability = getAvailabilityValue(semesterID);
+            const reasonInput = document.getElementById(`availability_reason_${semesterID}`);
             
+            // 1. Validate Academic Rank
             if (!selectedRank) { 
                 showMessage('Please select your academic rank.', 'error', semesterID); 
                 if (rankSel) rankSel.focus(); 
                 return false; 
             }
             
-            const availability = getAvailabilityValue(semesterID);
+            // 2. Validate Availability
             if (!availability) { showMessage('Please select your availability.', 'error', semesterID); return false; }
-            if (!validateRanks(null, semesterID)) { showMessage('Please fix duplicate ranks before submitting.', 'error', semesterID); return false; }
+            
+            // 3. Validate Reason (if Partially or Unavailable)
+            if ((availability === 'Partially' || availability === 'unavailable') && reasonInput && reasonInput.value.trim() === '') {
+                showMessage('Reason for partial availability or unavailability is required.', 'error', semesterID); 
+                reasonInput.focus();
+                return false;
+            }
 
+
+            // 4. Validate Ranks and Hours (Only if available)
             if (availability !== 'unavailable') {
+                if (!validateRanks(null, semesterID)) { showMessage('Please fix duplicate ranks before submitting.', 'error', semesterID); return false; }
+
                 const total = parseInt(document.getElementById(`total-hours-display-${semesterID}`).textContent) || 0;
                 
                 const full = FULL_LOAD[selectedRank] || 0;
