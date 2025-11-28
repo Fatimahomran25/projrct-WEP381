@@ -97,47 +97,61 @@ function partial_load($full) {
 
 $ALL_SEMESTER_COURSE_DATA = [];
 
-foreach ($allSemesters as $sem) {
-    $semesterID = intval($sem['ID']);
-    $courseListLocal = [];
+$courseQ = "
+    SELECT sc.courseCode, sc.name, sc.lectureHours, sc.tutorialHours, sc.labHours, sc.noSessionHours
+    FROM swecourses sc
+    ORDER BY sc.courseCode ASC
+";
+$stmtCourseAll = mysqli_prepare($conn, $courseQ);
+$courseListAll = [];
+if ($stmtCourseAll) {
+    mysqli_stmt_execute($stmtCourseAll);
+    $courseR = mysqli_stmt_get_result($stmtCourseAll);
+    if ($courseR) {
+        while ($row = mysqli_fetch_assoc($courseR)) {
+            
+            $courseCode = $row['courseCode'];
+            $lectureHours = intval($row['lectureHours']);
+            $tutorialHours = intval($row['tutorialHours']);
+            $labHours = intval($row['labHours']);
+            $noSessionHours = intval($row['noSessionHours']);
 
-    $courseQ = "
-        SELECT sc.courseCode, sc.name, sc.lectureHours, sc.tutorialHours, sc.labHours, sc.noSessionHours
-        FROM swecourses sc
-        INNER JOIN (
-            SELECT DISTINCT courseCode FROM coursesections WHERE semesterID = ?
-        ) cs ON cs.courseCode = sc.courseCode
-        ORDER BY sc.courseCode ASC
-    ";
-    $stmtCourse = mysqli_prepare($conn, $courseQ);
-    if ($stmtCourse) {
-        mysqli_stmt_bind_param($stmtCourse, "i", $semesterID);
-        mysqli_stmt_execute($stmtCourse);
-        $courseR = mysqli_stmt_get_result($stmtCourse);
-        if ($courseR) {
-            while ($row = mysqli_fetch_assoc($courseR)) {
-                $totalHours = intval($row['lectureHours']) + intval($row['tutorialHours']) + intval($row['labHours']) + intval($row['noSessionHours']);
+            if ($courseCode === 'SWE 496' || $courseCode === 'SWE 497') {
+                $totalHours = 3;
+                $hoursDisplay = "3 hrs ";
+                
+                $lectureHours = 0;
+                $tutorialHours = 0;
+                $labHours = 0;
+            } else {
+
+              $totalHours = $lectureHours + $tutorialHours + $labHours + $noSessionHours;
+                
                 $parts = [];
-                if (intval($row['lectureHours']) > 0) $parts[] = "Lecture " . intval($row['lectureHours']);
-                if (intval($row['tutorialHours']) > 0) $parts[] = "Tutorial " . intval($row['tutorialHours']);
-                if (intval($row['labHours']) > 0) $parts[] = "Lab " . intval($row['labHours']);
+                if ($lectureHours > 0) $parts[] = "Lecture " . $lectureHours;
+                if ($tutorialHours > 0) $parts[] = "Tutorial " . $tutorialHours;
+                if ($labHours > 0) $parts[] = "Lab " . $labHours;
                 $hoursDisplay = implode(" + ", $parts);
                 if ($hoursDisplay === "") $hoursDisplay = "No scheduled hours";
-
-                $courseListLocal[] = [
-                    'CourseCode' => $row['courseCode'],
-                    'CourseName' => $row['name'],
-                    'HoursDisplay' => $hoursDisplay,
-                    'LectureHours' => intval($row['lectureHours']),
-                    'TutorialHours' => intval($row['tutorialHours']),
-                    'LabHours' => intval($row['labHours']),
-                    'TotalHours' => $totalHours
-                ];
             }
+
+            $courseListAll[] = [
+                'CourseCode' => $courseCode,
+                'CourseName' => $row['name'],
+                'HoursDisplay' => $hoursDisplay,
+                'LectureHours' => $lectureHours,
+                'TutorialHours' => $tutorialHours,
+                'LabHours' => $labHours,
+                'TotalHours' => $totalHours 
+            ];
         }
-        mysqli_stmt_close($stmtCourse);
     }
-    $ALL_SEMESTER_COURSE_DATA[$semesterID] = $courseListLocal;
+    mysqli_stmt_close($stmtCourseAll);
+}
+
+foreach ($allSemesters as $sem) {
+    $semesterID = intval($sem['ID']);
+    $ALL_SEMESTER_COURSE_DATA[$semesterID] = $courseListAll;
 }
 
 $actionSemesterID = 0;
@@ -158,7 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($actionSemesterID === 0) {
         $submissionMessage = "Submission failed: Semester ID is missing.";
     } else {
-        $semInfo = null;
+
+      $semInfo = null;
         foreach ($allSemesters as $s) {
             if (intval($s['ID']) === $actionSemesterID) {
                 $semInfo = $s;
@@ -257,7 +272,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if (empty($submissionMessage)) {
-                              mysqli_begin_transaction($conn);
+
+              mysqli_begin_transaction($conn);
                 try {
                     $form_auto = is_auto_increment($conn, 'form', 'FormID');
                     $formID = $form_auto ? null : next_id($conn, 'form', 'FormID');
@@ -588,7 +604,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         function getAcademicRankValue(semesterID) {
             const s = document.getElementById(`academic-rank-${semesterID}`);
-            // *** FIX: Return empty string if not chosen, not default rank name ***
             return s ? s.value : '';
         }
         
@@ -622,7 +637,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (rank && FULL_LOAD[rank]) {
                 fullLoad = FULL_LOAD[rank];
             } 
-            // *** FIX: If no rank is selected, fullLoad remains 0 ***
             
             const allowed = (availability === 'Partially') ? Math.floor(fullLoad / 2) : (availability === 'unavailable' ? 0 : fullLoad);
             
@@ -685,7 +699,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if (restrictedForTA) {
                         row.style.display = 'none';
-                        // Keep value empty/0 to prevent hidden course hours from counting if rank is changed later
                         if(input.value.trim() !== '' && input.value.trim() !== '0') {
                              input.value = '0';
                         }
@@ -771,13 +784,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        // *** REQUEST 2: Hide other cards when one form opens/Restore visibility on close ***
+        // *** Hide other cards when one form opens/Restore visibility on close ***
         function setupFormVisibility(semesterID) {
-             // Find all cards and hide them
              document.querySelectorAll('.card').forEach(card => {
                  card.style.display = 'none';
              });
-             // Show the specific card corresponding to the form being opened
              const currentCard = document.querySelector(`.card[data-semester-id="${semesterID}"]`);
              if(currentCard) {
                  currentCard.style.display = 'block';
@@ -785,7 +796,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         function restoreFormVisibility() {
-            // Show all cards
             document.querySelectorAll('.card').forEach(card => {
                 card.style.display = 'block';
             });
@@ -793,7 +803,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // --- Event Listeners and Initial State ---
         document.addEventListener('DOMContentLoaded', () => {
-             // Find all semester forms and bind listeners
             document.querySelectorAll('div[id^="preferenceForm_"]').forEach(formDiv => {
                 const semesterID = parseInt(formDiv.id.split('_')[1]);
 
