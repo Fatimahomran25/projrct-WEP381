@@ -122,36 +122,48 @@ if (isset($error))   echo "<div class='alert alert-danger text-center'>$error</d
 
           <tbody>
           <?php
-          $sql = "SELECT * FROM swecourses";
-          $result = $conn->query($sql);
+     
+$sql = "SELECT * FROM swecourses";
+$result = $conn->query($sql);
 
-          while ($row = $result->fetch_assoc()) {
-              echo "
-              <tr>
-                  <td>{$row['courseCode']}</td>
-                  <td>{$row['name']}</td>
-                  <td>Lecture {$row['lectureHours']} + Tutorial {$row['tutorialHours']} + Lab {$row['labHours']}</td>
+while ($row = $result->fetch_assoc()):
+?>
+<tr>
+    <td><?= $row['courseCode'] ?></td>
+    <td><?= $row['name'] ?></td>
 
-                  <td>
-                      <button 
-                          class='btn btn-warning btn-sm editBtn'
-                          data-bs-toggle='modal'
-                          data-bs-target='#editCourseModal'
-                          data-code='{$row['courseCode']}'
-                          data-name='{$row['name']}'
-                          data-lecture='{$row['lectureHours']}'
-                          data-tutorial='{$row['tutorialHours']}'
-                          data-lab='{$row['labHours']}'
-                          data-session='{$row['noSessionHours']}'
-                      >Edit</button>
-                  </td>
+    <td>
+        Lecture <?= $row['lectureHours'] ?>
+        + Tutorial <?= $row['tutorialHours'] ?>
+        + Lab <?= $row['labHours'] ?>
 
-                  <td>
-                      <a href='deleteCourse.php?courseCode={$row['courseCode']}' class='btn btn-danger btn-sm'>Delete</a>
-                  </td>
-              </tr>";
-          }
-          ?>
+        <?php if ($row['noSessionHours'] > 0): ?>
+            + No Session <?= $row['noSessionHours'] ?>
+        <?php endif; ?>
+    </td>
+
+    <td>
+        <button 
+            class="btn btn-warning btn-sm editBtn"
+            data-bs-toggle="modal"
+            data-bs-target="#editCourseModal"
+            data-code="<?= $row['courseCode'] ?>"
+            data-name="<?= $row['name'] ?>"
+            data-lecture="<?= $row['lectureHours'] ?>"
+            data-tutorial="<?= $row['tutorialHours'] ?>"
+            data-lab="<?= $row['labHours'] ?>"
+            data-session="<?= $row['noSessionHours'] ?>"
+        >Edit</button>
+    </td>
+
+    <td>
+        <a href="deleteCourse.php?courseCode=<?= $row['courseCode'] ?>" 
+           class="btn btn-danger btn-sm">Delete</a>
+    </td>
+
+</tr>
+<?php endwhile; ?>
+
           </tbody>
 
         </table>
