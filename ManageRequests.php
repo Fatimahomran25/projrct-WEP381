@@ -5,21 +5,27 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
     exit;
 }
 
- 
+require_once 'CONFIG-DB.php';
+
+// Detect column names for form table
+$form_table_columns = ['academicRank', 'maxHours']; 
+$conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
+if (@mysqli_query($conn, "SELECT academic_rank, max_hours FROM form LIMIT 1") !== false) {
+     $form_table_columns = ['academic_rank', 'max_hours']; 
+}
+$academicRankCol = $form_table_columns[0];
+$maxHoursCol = $form_table_columns[1];
+
 $requests = []; // Start with empty array
 try {
-
-    require_once 'CONFIG-DB.php';  // Load the database configuration file
-    $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
-    
     if (!$conn->connect_error) {  // Check if the connection was successful
         $sql = "SELECT 
                     f.FormID as id,
                     u.FName as faculty_name,
                     u.userID as faculty_id,
-                    f.academicRank as rank,
+                    f.{$academicRankCol} as rank,
                     f.availability,
-                    f.maxHours,
+                    f.{$maxHoursCol} as maxHours,
                     s.name as semester,
                      -- Combine all course preferences into one string:
                     GROUP_CONCAT(CONCAT(p.CourseCode, ' (Rank: ', p.preferenceRank, ')') SEPARATOR ', ') as preferences
@@ -48,15 +54,23 @@ if (isset($_GET['view_id'])) { // Check if someone clicked a "View" button
         require_once 'CONFIG-DB.php';
         $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
         
+        // Detect column names again for the detailed view
+        $form_table_columns_detailed = ['academicRank', 'maxHours']; 
+        if (@mysqli_query($conn, "SELECT academic_rank, max_hours FROM form LIMIT 1") !== false) {
+             $form_table_columns_detailed = ['academic_rank', 'max_hours']; 
+        }
+        $academicRankColDetailed = $form_table_columns_detailed[0];
+        $maxHoursColDetailed = $form_table_columns_detailed[1];
+        
         if (!$conn->connect_error) { // Check if connection worked
             $viewId = $_GET['view_id']; // Get the specific request ID from URL
             $sql = "SELECT  -- SQL query to get detailed info for ONE specific request
                         f.FormID as id,
                         u.FName as faculty_name,
                         u.userID as faculty_id,
-                        f.academicRank as rank,
+                        f.{$academicRankColDetailed} as rank,
                         f.availability,
-                        f.maxHours,
+                        f.{$maxHoursColDetailed} as maxHours,
                         s.name as semester
                     FROM Form f
                     JOIN Users u ON f.FacultyID = u.userID
@@ -112,9 +126,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         if (!$conn->connect_error) {
             $deleteId = $_POST['delete_id'];
              // FIRST : Delete preferences (child)
-            $conn->query("DELETE FROM Preferences WHERE FormID = $deleteId");
+            $deletePrefs = $conn->prepare("DELETE FROM Preferences WHERE FormID = ?");
+            $deletePrefs->bind_param("i", $deleteId);
+            $deletePrefs->execute();
+            $deletePrefs->close();
+            
              // THEN: Delete the main form record
-            $conn->query("DELETE FROM Form WHERE FormID = $deleteId");
+            $deleteForm = $conn->prepare("DELETE FROM Form WHERE FormID = ?");
+            $deleteForm->bind_param("i", $deleteId);
+            $deleteForm->execute();
+            $deleteForm->close();
+            
             $conn->close();
             
             // Refresh page to show updated list
@@ -128,8 +150,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
 // Function to convert availability code to text
 function getAvailabilityText($code) {
-    $map = ['F' => 'Full Load', 'P' => 'Partially Available', 'U' => 'Unavailable'];
+    $map = ['A' => 'Available', 'P' => 'Partially Available', 'U' => 'Unavailable'];
     return $map[$code] ?? $code; // ?? means: if $map[$code] exists use it, else use $code
+}
+
+// Function to convert academic rank code to full name
+function getRankText($rank) {
+    $map = [
+        'PROF' => 'Professor',
+        'ASCP' => 'Associate Professor', 
+        'ASST' => 'Assistant Professor',
+        'LECT' => 'Lecturer',
+        'TAST' => 'Teaching Assistant'
+    ];
+    return $map[$rank] ?? $rank;
 }
 ?>
 
@@ -182,6 +216,8 @@ function getAvailabilityText($code) {
               <th>Faculty Name</th>
               <th>Rank</th>
               <th>Availability</th>
+              <th>Max Hours</th>
+              <th>Semester</th>
               <th>Preferences</th>
               <th>Actions</th>
             </tr>
@@ -189,14 +225,16 @@ function getAvailabilityText($code) {
           <tbody>
             <?php if (empty($requests)): ?>
               <tr>
-                <td colspan="5" class="text-center">No requests found</td>
+                <td colspan="7" class="text-center">No requests found</td>
               </tr>
             <?php else: ?>
               <?php foreach ($requests as $request): ?>
               <tr>
                 <td><?= htmlspecialchars($request['faculty_name'] ?? 'N/A') ?></td>
-                <td><?= htmlspecialchars($request['rank'] ?? 'N/A') ?></td>
+                <td><?= getRankText($request['rank'] ?? 'N/A') ?></td>
                 <td><?= getAvailabilityText($request['availability'] ?? '') ?></td>
+                <td><?= htmlspecialchars($request['maxHours'] ?? 'N/A') ?></td>
+                <td><?= htmlspecialchars($request['semester'] ?? 'N/A') ?></td>
                 <td><?= htmlspecialchars($request['preferences'] ?? 'No preferences') ?></td>
                 <td>
                   <!-- View Button -->
@@ -232,7 +270,7 @@ function getAvailabilityText($code) {
             <div class="col-md-6"><strong>Faculty ID:</strong> <?= htmlspecialchars($detailedRequest['faculty_id'] ?? '-') ?></div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-6"><strong>Academic Rank:</strong> <?= htmlspecialchars($detailedRequest['rank'] ?? '-') ?></div>
+            <div class="col-md-6"><strong>Academic Rank:</strong> <?= getRankText($detailedRequest['rank'] ?? '-') ?></div>
             <div class="col-md-6"><strong>Availability:</strong> <?= getAvailabilityText($detailedRequest['availability'] ?? '') ?></div>
           </div>
           <div class="row mb-3">
