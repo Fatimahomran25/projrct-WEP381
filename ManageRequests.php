@@ -17,8 +17,7 @@ try {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }
 
-    // The issue: Form.FacultyID links to facultymember.FacultyID, not directly to Users.userID
-    // We need to join through the facultymember table
+
     $sql = "SELECT 
                 f.FormID as id,
                 u.FName as faculty_name,
@@ -157,7 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         
         if ($deleteForm->execute()) {
             $conn->close();
-            header("Location: ManageRequests.php?deleted=1");
+            // Remove the success message parameter from the redirect
+            header("Location: ManageRequests.php");
             exit;
         } else {
             throw new Exception("Delete failed: " . $conn->error);
@@ -232,10 +232,6 @@ function getRankText($rank) {
     <div class="requests shadow-lg">
       <img src="assets/icons8-form-50.png" alt="requests icon">
       <h2>Manage Faculty Requests</h2>
-
-      <?php if (isset($_GET['deleted'])): ?>
-        <div class="alert alert-success">Request deleted successfully!</div>
-      <?php endif; ?>
 
       <?php if (isset($error)): ?>
         <div class="alert alert-danger">Error: <?= htmlspecialchars($error) ?></div>
