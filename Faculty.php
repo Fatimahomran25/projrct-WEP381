@@ -122,7 +122,7 @@ foreach ($allSemesters as $sem) {
 
                 if ($courseCode === 'SWE 496' || $courseCode === 'SWE 497' || $courseCode === 'GP1' || $courseCode === 'GP2') {
                     $totalHours = 3;
-                    $hoursDisplay = "3 hrs (Fixed Load)";
+                    $hoursDisplay = "3 hrs ";
                     $lectureHours = 0;
                     $tutorialHours = 0;
                     $labHours = 0;
@@ -324,7 +324,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         mysqli_stmt_close($insPref);
                     }
 
-                    mysqli_commit($conn);
+                    
+                    
+                    $maxAllowed = $maxHours; // Full load is the base maxHours
+                    if ($availability === 'P') {
+                        $maxAllowed = partial_load($maxHours); // Half load for Partially Available
+                    } elseif ($availability === 'U') {
+                        $maxAllowed = 0; // 0 load for Unavailable
+                    }
+
+                    // Calculate Assigned Hours (Total Requested Hours)
+                    // Note: $totalRequested was calculated in the validation block above.
+                    $totalAssignedHours = 0;
+                    if ($availability !== 'U') {
+                        foreach ($courseRanks as $code => $rv) {
+                            if (trim($rv) !== '' && intval($rv) > 0) {
+                                foreach ($courseList as $c) {
+                                    if ($c['CourseCode'] === $code) {
+                                        $totalAssignedHours += intval($c['TotalHours']);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // For safety, ensure assigned hours doesn't exceed the final calculated maxAllowed hours
+                    $finalAssignedHours = min($totalAssignedHours, $maxAllowed);
+
+                    // UPDATE facultymember table with new load
+                    $updateFacultySql = "UPDATE facultymember SET assignedHours = ?, maxAllowedHours = ? WHERE FacultyID = ?";
+                    $updateStmt = mysqli_prepare($conn, $updateFacultySql);
+                    if (!$updateStmt) { throw new Exception("SQL UPDATE Prepare Failed (facultymember): " . mysqli_error($conn)); }
+
+                    mysqli_stmt_bind_param($updateStmt, "iii", $finalAssignedHours, $maxAllowed, $facultyID);
+                    if (!mysqli_stmt_execute($updateStmt)) { throw new Exception("DB Execute Error (facultymember): " . mysqli_stmt_error($updateStmt)); }
+                    mysqli_stmt_close($updateStmt);
+
+                    // --- END ADDED LOGIC ---
+mysqli_commit($conn);
+
                     
                     mysqli_close($conn); 
                     header("Location: Faculty.php");
@@ -497,7 +535,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <option value="Lecturer">Lecturer (Max 16 hrs)</option>
                                             <option value="Teaching Assistant">Teaching Assistant (Max 16 hrs )</option>
                                         </select>
-                                        <div class="small text-muted">Max hours are enforced. If you choose "Partially Available" your load will be half of the maximum.</div>
                                     </fieldset>
 
                                     <fieldset class="p-3 border rounded mb-3 bg-light">
