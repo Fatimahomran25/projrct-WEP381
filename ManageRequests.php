@@ -7,111 +7,128 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
 
 require_once 'CONFIG-DB.php';
 
-// Detect column names for form table
-$form_table_columns = ['academicRank', 'maxHours']; 
-$conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
-if (@mysqli_query($conn, "SELECT academic_rank, max_hours FROM form LIMIT 1") !== false) {
-     $form_table_columns = ['academic_rank', 'max_hours']; 
-}
-$academicRankCol = $form_table_columns[0];
-$maxHoursCol = $form_table_columns[1];
-
 $requests = []; // Start with empty array
-try {
-    if (!$conn->connect_error) {  // Check if the connection was successful
-        $sql = "SELECT 
-                    f.FormID as id,
-                    u.FName as faculty_name,
-                    u.userID as faculty_id,
-                    f.{$academicRankCol} as rank,
-                    f.availability,
-                    f.{$maxHoursCol} as maxHours,
-                    s.name as semester,
-                     -- Combine all course preferences into one string:
-                    GROUP_CONCAT(CONCAT(p.CourseCode, ' (Rank: ', p.preferenceRank, ')') SEPARATOR ', ') as preferences
-                FROM Form f
-                JOIN Users u ON f.FacultyID = u.userID -- Connect to users table
-                JOIN Semesters s ON f.SemesterID = s.ID -- Connect to semesters table
-                LEFT JOIN Preferences p ON f.FormID = p.FormID
-                GROUP BY f.FormID -- Group by form to combine preferences
-                ORDER BY f.FormID DESC"; // Sort by newest forms first
-        
+$error = null;
 
-        $result = $conn->query($sql);  // Execute the SQL query and store the result
-        if ($result) { // Check if the query was successful
-            $requests = $result->fetch_all(MYSQLI_ASSOC);  // Fetch all rows from the result as an associative array
-        }
-        $conn->close();
+try {
+    $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
+    
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
     }
+
+    // The issue: Form.FacultyID links to facultymember.FacultyID, not directly to Users.userID
+    // We need to join through the facultymember table
+    $sql = "SELECT 
+                f.FormID as id,
+                u.FName as faculty_name,
+                u.userID as faculty_id,
+                f.academicRank as rank,
+                f.availability,
+                f.maxHours,
+                s.name as semester,
+                GROUP_CONCAT(CONCAT(p.CourseCode, ' (Rank: ', p.preferenceRank, ')') SEPARATOR ', ') as preferences
+            FROM Form f
+            JOIN facultymember fm ON f.FacultyID = fm.FacultyID
+            JOIN Users u ON fm.userID = u.userID
+            JOIN Semesters s ON f.SemesterID = s.ID
+            LEFT JOIN Preferences p ON f.FormID = p.FormID
+            GROUP BY f.FormID
+            ORDER BY f.FormID DESC";
+
+    $result = $conn->query($sql);
+    
+    if ($result === false) {
+        throw new Exception("Query failed: " . $conn->error);
+    }
+    
+    if ($result->num_rows > 0) {
+        $requests = $result->fetch_all(MYSQLI_ASSOC);
+    } else {
+        // Debug information
+        $test_sql = "SELECT COUNT(*) as total FROM form";
+        $test_result = $conn->query($test_sql);
+        $test_data = $test_result->fetch_assoc();
+        
+        // Test the joins separately
+        $join_test = "SELECT 
+                        f.FormID, 
+                        f.FacultyID as form_faculty_id,
+                        fm.FacultyID as member_faculty_id,
+                        fm.userID as member_user_id,
+                        u.userID as user_id,
+                        u.FName
+                    FROM Form f
+                    LEFT JOIN facultymember fm ON f.FacultyID = fm.FacultyID
+                    LEFT JOIN Users u ON fm.userID = u.userID";
+        $join_result = $conn->query($join_test);
+        
+        $error = "No requests found, but there are " . $test_data['total'] . " forms in the database. ";
+        $error .= "Join test returned " . $join_result->num_rows . " rows.";
+    }
+    
+    $conn->close();
+    
 } catch (Exception $e) {
     $error = $e->getMessage();
 }
 
 // variable to store detailed request data
 $detailedRequest = null;
-if (isset($_GET['view_id'])) { // Check if someone clicked a "View" button
+if (isset($_GET['view_id'])) {
     try {
-        require_once 'CONFIG-DB.php';
         $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
         
-        // Detect column names again for the detailed view
-        $form_table_columns_detailed = ['academicRank', 'maxHours']; 
-        if (@mysqli_query($conn, "SELECT academic_rank, max_hours FROM form LIMIT 1") !== false) {
-             $form_table_columns_detailed = ['academic_rank', 'max_hours']; 
+        if ($conn->connect_error) {
+            throw new Exception("Connection failed: " . $conn->connect_error);
         }
-        $academicRankColDetailed = $form_table_columns_detailed[0];
-        $maxHoursColDetailed = $form_table_columns_detailed[1];
         
-        if (!$conn->connect_error) { // Check if connection worked
-            $viewId = $_GET['view_id']; // Get the specific request ID from URL
-            $sql = "SELECT  -- SQL query to get detailed info for ONE specific request
-                        f.FormID as id,
-                        u.FName as faculty_name,
-                        u.userID as faculty_id,
-                        f.{$academicRankColDetailed} as rank,
-                        f.availability,
-                        f.{$maxHoursColDetailed} as maxHours,
-                        s.name as semester
-                    FROM Form f
-                    JOIN Users u ON f.FacultyID = u.userID
-                    JOIN Semesters s ON f.SemesterID = s.ID
-                    WHERE f.FormID = ?";
+        $viewId = intval($_GET['view_id']);
+        $sql = "SELECT 
+                    f.FormID as id,
+                    u.FName as faculty_name,
+                    u.userID as faculty_id,
+                    f.academicRank as rank,
+                    f.availability,
+                    f.maxHours,
+                    s.name as semester
+                FROM Form f
+                JOIN facultymember fm ON f.FacultyID = fm.FacultyID
+                JOIN Users u ON fm.userID = u.userID
+                JOIN Semesters s ON f.SemesterID = s.ID
+                WHERE f.FormID = ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $viewId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $detailedRequest = $result->fetch_assoc();
             
-
-            $stmt = $conn->prepare($sql); // Prepare the SQL statement (for security) the (?)
-            $stmt->bind_param("i", $viewId);
-            $stmt->execute();
-            $result = $stmt->get_result();
+            // Get preferences
+            $prefSql = "SELECT 
+                            p.preferenceRank,
+                            p.CourseCode,
+                            c.name as courseName
+                        FROM Preferences p
+                        LEFT JOIN SWECourses c ON p.CourseCode = c.courseCode
+                        WHERE p.FormID = ?
+                        ORDER BY p.preferenceRank";
             
-            // Check if the request exists
-            if ($result->num_rows > 0) {
-                $detailedRequest = $result->fetch_assoc();
-                
-                 // SECOND QUERY: Get the course preferences for this specific request
-                $prefSql = "SELECT 
-                                p.preferenceRank,
-                                p.CourseCode,
-                                c.name as courseName
-                            FROM Preferences p
-                            LEFT JOIN SWECourses c ON p.CourseCode = c.courseCode
-                            WHERE p.FormID = ?
-                            ORDER BY p.preferenceRank"; // Sort by preference order
-                
-                $prefStmt = $conn->prepare($prefSql);
-                $prefStmt->bind_param("i", $viewId);
-                $prefStmt->execute();
-                $prefResult = $prefStmt->get_result();
-                
-                $preferences = [];
-                // Loop through each preference row from the result
-                while($pref = $prefResult->fetch_assoc()) {
-                    $preferences[] = $pref;
-                }
-                // Add the preferences array to the detailed request data
-                $detailedRequest['preferences'] = $preferences;
+            $prefStmt = $conn->prepare($prefSql);
+            $prefStmt->bind_param("i", $viewId);
+            $prefStmt->execute();
+            $prefResult = $prefStmt->get_result();
+            
+            $preferences = [];
+            while($pref = $prefResult->fetch_assoc()) {
+                $preferences[] = $pref;
             }
-            $conn->close();
+            $detailedRequest['preferences'] = $preferences;
         }
+        $conn->close();
+        
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -120,29 +137,32 @@ if (isset($_GET['view_id'])) { // Check if someone clicked a "View" button
 // Handle delete button
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     try {
-        require_once 'CONFIG-DB.php';
         $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
         
-        if (!$conn->connect_error) {
-            $deleteId = $_POST['delete_id'];
-             // FIRST : Delete preferences (child)
-            $deletePrefs = $conn->prepare("DELETE FROM Preferences WHERE FormID = ?");
-            $deletePrefs->bind_param("i", $deleteId);
-            $deletePrefs->execute();
-            $deletePrefs->close();
-            
-             // THEN: Delete the main form record
-            $deleteForm = $conn->prepare("DELETE FROM Form WHERE FormID = ?");
-            $deleteForm->bind_param("i", $deleteId);
-            $deleteForm->execute();
-            $deleteForm->close();
-            
-            $conn->close();
-            
-            // Refresh page to show updated list
-            header("Location: ManageRequests.php");
-            exit;
+        if ($conn->connect_error) {
+            throw new Exception("Connection failed: " . $conn->connect_error);
         }
+        
+        $deleteId = intval($_POST['delete_id']);
+        
+        // Delete preferences first (child records)
+        $deletePrefs = $conn->prepare("DELETE FROM Preferences WHERE FormID = ?");
+        $deletePrefs->bind_param("i", $deleteId);
+        $deletePrefs->execute();
+        $deletePrefs->close();
+        
+        // Delete the main form record
+        $deleteForm = $conn->prepare("DELETE FROM Form WHERE FormID = ?");
+        $deleteForm->bind_param("i", $deleteId);
+        
+        if ($deleteForm->execute()) {
+            $conn->close();
+            header("Location: ManageRequests.php?deleted=1");
+            exit;
+        } else {
+            throw new Exception("Delete failed: " . $conn->error);
+        }
+        
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -150,8 +170,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
 // Function to convert availability code to text
 function getAvailabilityText($code) {
-    $map = ['A' => 'Available', 'P' => 'Partially Available', 'U' => 'Unavailable'];
-    return $map[$code] ?? $code; // ?? means: if $map[$code] exists use it, else use $code
+    $map = [
+        'A' => 'Available', 
+        'P' => 'Partially Available', 
+        'U' => 'Unavailable',
+        'F' => 'Fully Available',
+        'Y' => 'Available'
+    ];
+    return $map[$code] ?? $code;
 }
 
 // Function to convert academic rank code to full name
@@ -161,7 +187,9 @@ function getRankText($rank) {
         'ASCP' => 'Associate Professor', 
         'ASST' => 'Assistant Professor',
         'LECT' => 'Lecturer',
-        'TAST' => 'Teaching Assistant'
+        'TAST' => 'Teaching Assistant',
+        'Professor' => 'Professor',
+        'Teaching Assistant' => 'Teaching Assistant'
     ];
     return $map[$rank] ?? $rank;
 }
@@ -205,6 +233,10 @@ function getRankText($rank) {
       <img src="assets/icons8-form-50.png" alt="requests icon">
       <h2>Manage Faculty Requests</h2>
 
+      <?php if (isset($_GET['deleted'])): ?>
+        <div class="alert alert-success">Request deleted successfully!</div>
+      <?php endif; ?>
+
       <?php if (isset($error)): ?>
         <div class="alert alert-danger">Error: <?= htmlspecialchars($error) ?></div>
       <?php endif; ?>
@@ -213,6 +245,7 @@ function getRankText($rank) {
         <table class="table table-dark table-hover align-middle">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Faculty Name</th>
               <th>Rank</th>
               <th>Availability</th>
@@ -225,11 +258,12 @@ function getRankText($rank) {
           <tbody>
             <?php if (empty($requests)): ?>
               <tr>
-                <td colspan="7" class="text-center">No requests found</td>
+                <td colspan="8" class="text-center">No requests found in the database</td>
               </tr>
             <?php else: ?>
               <?php foreach ($requests as $request): ?>
               <tr>
+                <td><?= htmlspecialchars($request['id'] ?? 'N/A') ?></td>
                 <td><?= htmlspecialchars($request['faculty_name'] ?? 'N/A') ?></td>
                 <td><?= getRankText($request['rank'] ?? 'N/A') ?></td>
                 <td><?= getAvailabilityText($request['availability'] ?? '') ?></td>
@@ -241,7 +275,7 @@ function getRankText($rank) {
                   <a href="?view_id=<?= $request['id'] ?>" class="btn btn-sm btn-primary">View</a>
                   
                   <!-- Delete Button -->
-                  <form method="POST" style="display: inline;" onsubmit="return confirm('Delete request for <?= htmlspecialchars($request['faculty_name'] ?? 'this faculty') ?>?')">
+                  <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete request #<?= $request['id'] ?> for <?= htmlspecialchars($request['faculty_name'] ?? 'this faculty') ?>?')">
                     <input type="hidden" name="delete_id" value="<?= $request['id'] ?>">
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                   </form>
@@ -261,7 +295,7 @@ function getRankText($rank) {
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content bg-dark text-light">
         <div class="modal-header border-secondary">
-          <h5 class="modal-title">Faculty Request Details</h5>
+          <h5 class="modal-title">Faculty Request Details #<?= $detailedRequest['id'] ?></h5>
           <a href="ManageRequests.php" class="btn-close btn-close-white"></a>
         </div>
         <div class="modal-body">
